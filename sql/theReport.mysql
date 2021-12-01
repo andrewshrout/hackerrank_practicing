@@ -1,0 +1,24 @@
+/*
+The report
+12m 37s (needed to read more carefully on the sort)
+*/
+
+SELECT CASE
+    WHEN Marks > 69 THEN Name
+    ELSE "NULL"
+    END as Name,
+CASE 
+    WHEN Marks >= 90 THEN 10
+    WHEN Marks < 90 AND Marks > 79 THEN 9
+    WHEN Marks < 80 AND Marks > 69 THEN 8
+    WHEN Marks < 70 AND Marks > 59 THEN 7
+    WHEN Marks < 60 AND Marks > 49 THEN 6
+    WHEN Marks < 50 AND Marks > 39 THEN 5
+    WHEN Marks < 40 AND Marks > 29 THEN 4
+    WHEN Marks < 30 AND Marks > 19 THEN 3
+    WHEN Marks < 20 AND Marks > 9 THEN 2
+    ELSE 0
+    END AS Grade,
+    Marks
+FROM Students
+ORDER BY Grade DESC, Name, Marks ASC;
