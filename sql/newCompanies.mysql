@@ -1,0 +1,17 @@
+/*
+hackerrank SQL intermediate "New Companies"
+time 6m 24s
+*/
+
+
+SELECT 
+    c.company_code, 
+    MAX(c.founder), 
+    COUNT(DISTINCT e.lead_manager_code), 
+    COUNT(DISTINCT senior_manager_code),
+    COUNT(DISTINCT manager_code),
+    COUNT(DISTINCT e.employee_code)
+FROM company as c
+JOIN employee as e
+ON c.company_code = e.company_code
+GROUP BY c.company_code
