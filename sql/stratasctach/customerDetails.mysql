@@ -1,0 +1,39 @@
+/*
+Time: 2m 41s
+Company: Amazon
+Main Concept: Left Join
+*/
+
+
+SELECT 
+  c.first_name, 
+  c.last_name, 
+  c.city, 
+  o.order_details
+FROM customers AS c
+LEFT JOIN orders AS o
+ON c.id = o.cust_id
+ORDER BY 
+  c.first_name ASC,
+  o.order_details ASC;
+  
+  /*
+  Suggested Solution
+  Notes:
+  */
+  SELECT 
+    c.first_name, 
+    c.last_name, 
+    c.city, 
+    o.order_details
+FROM customers c
+LEFT JOIN orders o 
+    ON o.cust_id = c.id
+ORDER BY 
+    c.first_name,
+    o.order_details;
+
+  /*
+  Top Voted Solution
+  Notes:
+  */
