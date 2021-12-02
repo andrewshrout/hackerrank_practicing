@@ -10,3 +10,19 @@ HAVING department_id = 1)
 FROM db_employee
 GROUP BY department_id
 HAVING department_id = 4
+
+
+/*
+suggested solution
+NOTE: they do an unnecessary join to get the label for the departments but still use a subquery
+*/
+
+SELECT
+  ABS((SELECT max(salary)
+   FROM db_employee emp
+   JOIN db_dept dept ON emp.department_id = dept.id
+   WHERE department = 'marketing') -
+  (SELECT max(salary)
+   FROM db_employee emp
+   JOIN db_dept dept ON emp.department_id = dept.id
+   WHERE department = 'engineering')) AS salary_difference
