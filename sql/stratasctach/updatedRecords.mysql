@@ -1,0 +1,44 @@
+/*
+easy
+1m59s
+note: using max is not optimal because in a real database, any of the information could change for employees like switching departments. window functions are apparently safer.
+*/
+
+select id, max(first_name), max(last_name), max(department_id), max(salary)
+from ms_employee_salary
+GROUP BY id
+ORDER BY id ASC;
+
+/*
+suggested solution
+uses max salary, groups by everything (note I just use max because they're already grouped in one dimension (id)
+*/
+SELECT id,
+       first_name,
+       last_name,
+       department_id,
+       max(salary)
+FROM ms_employee_salary
+GROUP BY id,
+         first_name,
+         last_name,
+         department_id
+ORDER BY id ASC
+
+/*
+highest upvoted solution
+in this manner, we use the only unique id and we use a subquery with a window function to dense_rank them and find their highest salary no matter where they are currently in the company.
+*/
+
+SELECT 
+    id,
+    first_name,
+    last_name,
+    department_id,
+    salary as max_salary
+FROM (
+    SELECT *, 
+    dense_rank() OVER (PARTITION BY id ORDER BY salary DESC) AS rnk
+    FROM ms_employee_salary) fnl
+WHERE fnl.rnk = 1
+ORDER by fnl.id ASC
