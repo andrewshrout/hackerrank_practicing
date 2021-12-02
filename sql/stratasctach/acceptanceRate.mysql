@@ -1,0 +1,55 @@
+/*
+Time: 28m 1s
+Company: Facebook
+Main Concept: subquery, aggregate functions
+NOTES: got tripped up by not visualizing the process, trying to use case statements instead of just an absolute count, and "pre-purging" the sent's without receiveds.
+*/
+
+SELECT f.date, COUNT(r.action) :: NUMERIC / COUNT(f.action)
+FROM fb_friend_requests f
+LEFT JOIN (
+SELECT *
+FROM fb_friend_requests
+WHERE action = 'accepted'
+) AS r
+ON f.user_id_sender = r.user_id_sender
+WHERE f.action = 'sent'
+GROUP BY f.date
+
+/*
+Suggested Solution
+Notes: used two subqueries, more matching of id's, purges "sent" beforehand whereas I do it in the main query
+*/
+
+SELECT a.date,
+       count(b.user_id_receiver)/count(a.user_id_sender)::decimal AS percentage_acceptance
+FROM
+  (SELECT date, user_id_sender,
+                user_id_receiver
+   FROM fb_friend_requests
+   WHERE action='sent' ) a
+LEFT JOIN
+  (SELECT date, user_id_sender,
+                user_id_receiver
+   FROM fb_friend_requests
+   WHERE action='accepted' ) b ON a.user_id_sender=b.user_id_sender
+AND a.user_id_receiver=b.user_id_receiver
+GROUP BY a.date
+
+/*
+Top Voted Solution
+Notes:
+*/
+
+SELECT *
+FROM
+  (SELECT date, user_id_sender,
+                user_id_receiver
+   FROM fb_friend_requests
+   WHERE action='sent' ) a
+LEFT JOIN
+  (SELECT date, user_id_sender,
+                user_id_receiver
+   FROM fb_friend_requests
+   WHERE action='accepted' ) b ON a.user_id_sender=b.user_id_sender
+AND a.user_id_receiver=b.user_id_receiver
