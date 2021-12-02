@@ -1,0 +1,12 @@
+/*
+easy difficulty, dropbox
+6:55
+*/
+
+SELECT max(salary) - (SELECT max(salary)
+FROM db_employee
+GROUP BY department_id
+HAVING department_id = 1)
+FROM db_employee
+GROUP BY department_id
+HAVING department_id = 4
