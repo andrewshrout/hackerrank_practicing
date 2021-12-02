@@ -1,0 +1,58 @@
+/*
+ATTEMPT 1:
+Time: ~20m
+Company: Facebook
+Main Concept: UNION ALL
+NOTES: Attempted a rats nest of subqueries, then a INNER JOIN  to get only the maximum. Should have used CTE's the same way that the actual solution worked.
+*/
+
+SELECT date, SUM(consumption) AS total_energy
+FROM (
+select *
+FROM fb_eu_energy eu
+UNION ALL
+SELECT * FROM fb_asia_energy asia
+UNION ALL
+SELECT * FROM fb_na_energy na
+ORDER BY date ) AS total_energy_consum
+GROUP BY date
+
+/*
+Suggested Solution
+Notes: Uses a CTE and unions the dates and consumption, then creates another CTE using the first to sum up consumption, then creates a final one to find out the maximum value. Then it self joins.
+*/
+WITH total_energy AS
+  (SELECT *
+   FROM fb_eu_energy eu
+   UNION ALL SELECT *
+   FROM fb_asia_energy asia
+   UNION ALL SELECT *
+   FROM fb_na_energy na),
+     energy_by_date AS
+  (SELECT date, sum(consumption) AS total_energy
+   FROM total_energy
+   GROUP BY date
+   ORDER BY date ASC),
+     max_energy AS
+  (SELECT max(total_energy) AS max_energy
+   FROM energy_by_date)
+SELECT ebd.date,
+       ebd.total_energy
+FROM energy_by_date ebd
+JOIN max_energy me ON ebd.total_energy = me.max_energy
+
+/*
+Top Voted Solution
+Notes: Creates a subquery with union of all energy, then queries that with a window function that ranks them, then finally only selects the top values (where R=1)
+This approach is more flexible as you can substitue R to get more values
+*/
+
+SELECT date, total_energy FROM
+(SELECT date, SUM(consumption) AS total_energy, RANK() OVER (ORDER BY SUM(consumption) DESC) AS r 
+FROM (SELECT * FROM fb_eu_energy
+UNION ALL
+SELECT * FROM fb_asia_energy
+UNION ALL
+SELECT * FROM fb_na_energy) fb_energy
+GROUP BY date) fb_energy_ranked
+WHERE r = 1
