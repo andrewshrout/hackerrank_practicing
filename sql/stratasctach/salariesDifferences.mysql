@@ -26,3 +26,13 @@ SELECT
    FROM db_employee emp
    JOIN db_dept dept ON emp.department_id = dept.id
    WHERE department = 'engineering')) AS salary_difference
+
+/*
+highest voted solution
+uses "filter" ->
+https://docs.data.world/documentation/sql/concepts/intermediate/GROUP_BY.html
+*/
+
+select abs(max(salary) filter (where department = 'marketing') - max(salary) filter (where department = 'engineering')) 
+from db_employee
+join db_dept d on department_id = d.id
