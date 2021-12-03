@@ -1,0 +1,27 @@
+/*
+my answer
+2m07s
+*/
+
+select worker_title
+from worker w
+JOIN title t
+ON w.worker_id = t.worker_ref_id
+WHERE salary = (SELECT MAX(salary) FROM worker)
+
+/*
+their answer
+*/
+
+SELECT *
+FROM
+  (SELECT CASE
+              WHEN salary =
+                     (SELECT max(salary)
+                      FROM worker) THEN worker_title
+          END AS best_paid_title
+         
+   FROM worker a
+   INNER JOIN title b ON b.worker_ref_id=a.worker_id
+   ORDER BY best_paid_title) sq
+WHERE best_paid_title IS NOT NULL
