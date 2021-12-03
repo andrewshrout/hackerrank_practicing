@@ -1,0 +1,25 @@
+/*
+my answer
+3m57s
+*/
+
+select e.first_name, e.salary
+from employee e
+JOIN (
+SELECT id, salary
+FROM employee
+WHERE employee_title = 'Manager'
+) m
+ON e.manager_id = m.id
+WHERE e.salary > m.salary
+
+/*
+their answer
+*/
+
+SELECT
+        a.first_name AS employee_name, 
+        a.salary AS employee_salary
+FROM employee AS a 
+JOIN employee AS b ON  a.manager_id = b.id
+WHERE a.salary > b.salary;
