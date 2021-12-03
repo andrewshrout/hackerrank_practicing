@@ -1,0 +1,21 @@
+/*
+my answer
+3m14s
+*/
+select EXTRACT(YEAR FROM inspection_date), COUNT(*)
+from sf_restaurant_health_violations
+WHERE business_name = 'Roxanne Cafe' AND violation_description IS NOT NULL
+GROUP BY EXTRACT(YEAR FROM inspection_date)
+
+/*
+their answer
+*/
+
+SELECT EXTRACT (YEAR
+                FROM inspection_date :: DATE) AS YEAR,
+               count(*) AS n_inspections
+FROM sf_restaurant_health_violations
+WHERE business_name = 'Roxanne Cafe'
+  AND violation_id IS NOT NULL
+GROUP BY YEAR
+ORDER BY YEAR ASC
