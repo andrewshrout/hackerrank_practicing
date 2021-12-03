@@ -1,0 +1,26 @@
+/*
+my solution
+3m 11s
+*/
+
+select cust_id, SUM(total_order_cost) AS revenue from orders
+WHERE DATE_TRUNC('month',order_date) = '2019-03-01 00:00:00'
+GROUP BY cust_id
+ORDER BY revenue DESC
+
+/*
+their solution
+differences: use extract rather than date_trunc
+NOTE: can also use "between"
+*/
+
+SELECT cust_id,
+       SUM(total_order_cost) AS revenue
+FROM orders
+WHERE EXTRACT('MONTH'
+              FROM order_date :: TIMESTAMP) = 3
+      AND
+      EXTRACT('YEAR'
+              FROM order_date :: TIMESTAMP) = 2019
+GROUP BY cust_id
+ORDER BY revenue DESC
