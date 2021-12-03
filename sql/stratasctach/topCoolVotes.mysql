@@ -1,0 +1,19 @@
+/*
+my solution
+1m08s
+*/
+
+select business_name, review_text
+from yelp_reviews
+WHERE cool = (SELECT max(cool) FROM yelp_reviews)
+
+/*
+their solution
+*/
+
+SELECT business_name,
+       review_text
+FROM yelp_reviews
+WHERE cool =
+    (SELECT max(cool)
+     FROM yelp_reviews)
