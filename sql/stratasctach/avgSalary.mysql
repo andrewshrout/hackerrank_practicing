@@ -1,0 +1,15 @@
+
+select e.department, e.first_name, e.salary, da.avg_sal
+FROM employee e
+JOIN (SELECT department, AVG(salary) AS avg_sal FROM employee GROUP BY department) da
+ON e.department = da.department
+
+/*
+their solution uses window functions
+*/
+SELECT 
+        department, 
+        first_name, 
+        salary, 
+        AVG(salary) over (PARTITION BY department) 
+FROM employee;
