@@ -1,0 +1,21 @@
+/*
+1m44s
+*/
+select first_name, target
+from salesforce_employees
+WHERE manager_id = 13
+AND target = ( SELECT MAX(target) FROM salesforce_employees
+                WHERE manager_id = 13)
+                
+  /* 
+  Theirs
+  */
+  
+  SELECT first_name,
+       target
+FROM salesforce_employees
+WHERE target IN
+    (SELECT MAX(target)
+     FROM salesforce_employees
+     WHERE manager_id = 13)
+  AND manager_id = 13
