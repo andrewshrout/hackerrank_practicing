@@ -1,0 +1,5 @@
+select avg(fhs.popularity), fe.location
+from facebook_employees fe
+JOIN facebook_hack_survey fhs
+ON fe.id = fhs.employee_id
+GROUP BY fe.location
