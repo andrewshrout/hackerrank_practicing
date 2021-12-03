@@ -1,0 +1,48 @@
+/*
+My answer
+26m40s
+medium difficulty
+*/
+
+SELECT user_id, AVG(session_time)
+FROM
+(
+  SELECT 
+      fwl.user_id,
+      MIN(exits.timestamp) - MAX(fwl.timestamp) AS session_time,
+      exits.logout_day
+  FROM facebook_web_log fwl
+  JOIN (
+    SELECT 
+      user_id, 
+      timestamp, 
+      action, 
+      DATE_TRUNC('day', timestamp) AS logout_day
+    FROM facebook_web_log
+    WHERE action = 'page_exit'
+    ) exits
+  ON fwl.user_id = exits.user_id
+  WHERE fwl.action = 'page_load'
+    AND logout_day = DATE_TRUNC('day', fwl.timestamp)
+    AND fwl.timestamp != exits.timestamp
+  GROUP BY exits.logout_day, fwl.user_id
+  ) final
+GROUP BY user_id
+
+/*
+Suggested Solution
+DIFFERENCES: less segmentation of subqueries - they filter the join instead.
+*/
+
+with all_user_sessions as (
+    SELECT t1.user_id, t1.timestamp::date as date,
+           min(t2.timestamp::TIMESTAMP) - max(t1.timestamp::TIMESTAMP) as session_duration
+    FROM facebook_web_log t1
+    JOIN facebook_web_log t2 ON t1.user_id = t2.user_id
+    WHERE t1.action = 'page_load' 
+      AND t2.action = 'page_exit' 
+      AND t2.timestamp > t1.timestamp
+    GROUP BY 1, 2) 
+SELECT user_id, avg(session_duration)
+FROM all_user_sessions
+GROUP BY user_id
