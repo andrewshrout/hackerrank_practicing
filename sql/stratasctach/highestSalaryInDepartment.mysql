@@ -1,0 +1,28 @@
+/*
+my solution
+3m24s
+*/
+
+
+SELECT department, first_name, salary FROM (
+SELECT department, first_name, salary, RANK() OVER (partition by department ORDER BY salary DESC) r
+FROM employee
+) ranked
+WHERE r = 1
+
+/*
+Their solution
+*/
+
+SELECT
+    department AS department,
+    first_name AS employee_name,
+    salary
+FROM employee
+WHERE (department , salary) IN
+        (SELECT 
+                        department, 
+                        MAX(salary)
+        FROM employee         
+        GROUP BY department
+        );
