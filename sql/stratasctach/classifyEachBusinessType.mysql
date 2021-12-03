@@ -1,0 +1,34 @@
+/*
+My answer
+15m01s
+biggest mistakes: 2 spelling errors on restaurant, then needing to use DISTINCT which they didn't mention
+*/
+
+
+select
+    DISTINCT business_name,
+    CASE
+        WHEN business_name ILIKE '%restaurant%' THEN 'restaurant'
+        WHEN 
+        business_name ILIKE '%cafe%' OR
+        business_name ILIKE '%coffee%' OR
+        business_name ILIKE '%café%'
+        THEN 'cafe'
+        WHEN business_name ILIKE '%school%' THEN 'school'
+        ELSE 'other'
+        END AS business_type
+from sf_restaurant_health_violations;
+
+/*
+their answer
+differences: use lower( which I used ) / use array( look this up? )
+*/
+
+SELECT distinct business_name,
+       CASE
+           WHEN business_name ilike any(array['%school%']) THEN 'school'
+           WHEN lower(business_name) like any(array['%restaurant%']) THEN 'restaurant'
+           WHEN lower(business_name) like any(array['%cafe%', '%café%', '%coffee%']) THEN 'cafe'
+           ELSE 'other'
+       END AS business_type
+FROM sf_restaurant_health_violations
