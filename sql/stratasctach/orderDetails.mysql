@@ -1,0 +1,24 @@
+/*
+my solution
+2m34s
+*/
+select c.first_name, o.order_date, o.order_details, o.total_order_cost
+from customers c
+JOIN orders o
+ON c.id = o.cust_id
+WHERE first_name IN ('Jill', 'Eva')
+ORDER BY o.cust_id ASC
+
+/*
+their solution
+*/
+
+SELECT customers.first_name,
+       order_date,
+       order_details,
+       total_order_cost
+FROM orders
+JOIN customers ON customers.id = orders.cust_id
+WHERE customers.first_name IN ('Jill',
+                               'Eva')
+ORDER BY cust_id;
