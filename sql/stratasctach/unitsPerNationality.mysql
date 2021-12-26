@@ -1,0 +1,19 @@
+select nationality, COUNT(*)
+from airbnb_units u
+JOIN airbnb_hosts h
+ON u.host_id = h.host_id
+WHERE age < 30 and unit_type = 'Apartment'
+GROUP BY nationality
+
+
+
+SELECT 
+    nationality,
+    count(*) as apartment_count
+FROM airbnb_units apartment 
+INNER JOIN airbnb_hosts host 
+  ON apartment.host_id = host.host_id 
+WHERE host.age < 30 
+AND unit_type = 'Apartment'
+GROUP BY host.nationality 
+ORDER BY apartment_count DESC
