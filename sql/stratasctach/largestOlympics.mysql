@@ -1,0 +1,23 @@
+select games, COUNT(DISTINCT id) as athletes_count
+from olympics_athletes_events
+GROUP BY games
+ORDER BY athletes_count DESC
+LIMIT 1;
+
+
+WITH subquery AS
+  (SELECT games,
+          count(DISTINCT id) AS athletes_count
+   FROM olympics_athletes_events
+   GROUP BY games
+   ORDER BY athletes_count DESC)
+SELECT *
+FROM subquery
+WHERE athletes_count =
+    (SELECT max(athletes_count)
+     FROM subquery)
+     
+     
+withranks AS (select rank()over (order by number_athletes DESC) AS ranks, games, number_athletes from new_data)
+
+select games, number_athletes from withranks where ranks = 1
