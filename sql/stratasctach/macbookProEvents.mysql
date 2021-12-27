@@ -1,0 +1,20 @@
+/*
+https://platform.stratascratch.com/coding/9653-count-the-number-of-user-events-performed-by-macbookpro-users?python=
+1m03s
+*/
+select event_name, COUNT(occurred_at)
+from playbook_events
+WHERE device = 'macbook pro'
+GROUP BY event_name
+ORDER BY 2 DESC
+
+SELECT
+ event_name,
+ count(*) AS event_count
+FROM playbook_events
+WHERE 
+    device = 'macbook pro'
+GROUP BY 
+    event_name
+ORDER BY 
+    event_count DESC
