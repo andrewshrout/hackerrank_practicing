@@ -1,0 +1,20 @@
+/*
+https://platform.stratascratch.com/coding/9991-top-ranked-songs?python=
+1m11s
+*/
+
+select trackname, COUNT(*) from spotify_worldwide_daily_song_ranking
+WHERE position = 1
+GROUP BY trackname
+ORDER BY 2 DESC
+
+SELECT
+    trackname,
+    count(*) AS times_top1
+FROM spotify_worldwide_daily_song_ranking
+WHERE 
+    position = 1
+GROUP BY
+    trackname
+ORDER BY
+    times_top1 DESC
